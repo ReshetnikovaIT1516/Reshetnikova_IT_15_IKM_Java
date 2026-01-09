@@ -39,4 +39,4 @@
 
 * @Min/@Max - проверяет числа
 
-* @Override - переопределяет toString()
+* @Override - переопределяет toString() 
