@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фильмы</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .action-buttons .btn {
+            margin-bottom: 3px;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-4">
+    <h1>Фильмы</h1>
+    <p>Управление каталогом фильмов</p>
+
+    <div class="mb-3">
+        <a th:href="@{/movies/create}" class="btn btn-primary">Добавить фильм</a>
+        <a th:href="@{/}" class="btn btn-secondary">На главную</a>
+    </div>
+
+    <table class="table table-bordered table-striped table-hover">
+        <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>НАЗВАНИЕ</th>
+            <th>ЖАНР</th>
+            <th>ДЛИТЕЛЬНОСТЬ</th>
+            <th>ЦЕНА</th>
+            <th>ГОД</th>
+            <th>ДЕЙСТВИЯ</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Проверка на пустой список -->
+        <tr th:if="${movies.empty}">
+            <td colspan="7" class="text-center text-muted py-4">
+                <div style="font-size: 1.2em; color: #6c757d;">
+                    📽️ Нет фильмов в каталоге
+                </div>
+                <p class="mt-2">Нажмите "Добавить фильм", чтобы создать первую запись</p>
+            </td>
+        </tr>
+
+        <!-- Цикл по фильмам -->
+        <tr th:each="movie : ${movies}" th:unless="${movies.empty}">
+            <td th:text="${movie.id}">1</td>
+            <td th:text="${movie.title}">Название фильма</td>
+            <td th:text="${movie.genre?.title ?: 'Не указан'}">Жанр</td>
+
+            <!-- ВОТ ЭТА СТРОКА 158 (приблизительно) -->
+            <!-- Используем безопасный вызов метода -->
+            <td th:text="${movie.getFormattedDuration()} ?: ''">120 мин</td>
+
+            <td th:text="${movie.getFormattedTicketPrice()} ?: ''">300 руб.</td>
+            <td th:text="${movie.releaseYear}">2024</td>
+            <td class="action-buttons">
+                <!-- Добавлена кнопка "Просмотр" -->
+                <a th:href="@{/movies/view/{id}(id=${movie.id})}"
+                   class="btn btn-sm btn-info d-block mb-1">👁️ Просмотр</a>
+
+                <a th:href="@{/movies/edit/{id}(id=${movie.id})}"
+                   class="btn btn-sm btn-warning d-block mb-1">✏️ Редактировать</a>
+
+                <a th:href="@{/movies/delete/{id}(id=${movie.id})}"
+                   class="btn btn-sm btn-danger d-block"
+                   onclick="return confirm('Вы уверены, что хотите удалить этот фильм?')">
+                    🗑️ Удалить
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Дополнительная навигация -->
+    <div class="mt-4">
+        <a th:href="@{/genres}" class="btn btn-outline-primary">Управление жанрами</a>
+        <a th:href="@{/tickets}" class="btn btn-outline-success">Управление билетами</a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

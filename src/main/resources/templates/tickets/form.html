@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${ticket.id != null} ? 'Редактирование билета' : 'Продажа билета'">
+        Продажа билета
+    </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/}">
+            <i class="bi bi-camera-reels"></i> Кинотеатр
+        </a>
+        <div class="navbar-nav">
+            <a class="nav-link" th:href="@{/}">Главная</a>
+            <a class="nav-link" th:href="@{/movies}">Фильмы</a>
+            <a class="nav-link" th:href="@{/genres}">Жанры</a>
+            <a class="nav-link active" th:href="@{/tickets}">Билеты</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/}">Главная</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/tickets}">Билеты</a></li>
+            <li class="breadcrumb-item active" th:text="${ticket.id != null} ? 'Редактирование' : 'Продажа'">
+                Продажа
+            </li>
+        </ol>
+    </nav>
+
+    <h1 class="mb-4" th:text="${ticket.id != null} ? 'Редактирование билета' : 'Продажа нового билета'">
+        Продажа нового билета
+    </h1>
+
+    <!-- Сообщения об успехе/ошибке -->
+    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${success}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span th:text="${error}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <form th:action="@{/tickets/save}" th:object="${ticket}" method="post">
+                <input type="hidden" th:field="*{id}">
+                <input type="hidden" th:field="*{date}">
+
+                <div class="mb-3">
+                    <label for="movie" class="form-label">
+                        <i class="bi bi-film"></i> Фильм *
+                    </label>
+                    <select id="movie" th:field="*{movie}" class="form-select" required>
+                        <option value="">Выберите фильм...</option>
+                        <option th:each="m : ${movies}"
+                                th:value="${m.id}"
+                                th:text="${m.title}"
+                                th:selected="${ticket.movie != null && ticket.movie.id == m.id}">
+                        </option>
+                    </select>
+                    <div class="text-danger" th:if="${#fields.hasErrors('movie')}">
+                        <span th:errors="*{movie}"></span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="customerName" class="form-label">
+                        <i class="bi bi-person"></i> Имя покупателя *
+                    </label>
+                    <input type="text"
+                           th:field="*{customerName}"
+                           class="form-control"
+                           id="customerName"
+                           placeholder="Введите имя покупателя"
+                           required>
+                    <div class="text-danger" th:if="${#fields.hasErrors('customerName')}">
+                        <span th:errors="*{customerName}"></span>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="count" class="form-label">
+                        <i class="bi bi-ticket-perforated"></i> Количество билетов *
+                    </label>
+                    <input type="number"
+                           th:field="*{count}"
+                           class="form-control"
+                           id="count"
+                           min="1"
+                           placeholder="Введите количество"
+                           required>
+                    <div class="form-text">Минимум 1 билет</div>
+                    <div class="text-danger" th:if="${#fields.hasErrors('count')}">
+                        <span th:errors="*{count}"></span>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save"></i>
+                        <span th:if="${ticket.id != null}">Сохранить изменения</span>
+                        <span th:unless="${ticket.id != null}">Продать билеты</span>
+                    </button>
+                    <a th:href="@{/tickets}" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> Отмена
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Автофокус на поле имени покупателя
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('customerName').focus();
+    });
+</script>
+</body>
+</html>

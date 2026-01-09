@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'Просмотр: ' + ${movie.title}">Просмотр фильма</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <style>
+        .detail-label {
+            font-weight: bold;
+            color: #6c757d;
+            width: 200px;
+            flex-shrink: 0;
+        }
+        .detail-value {
+            color: #212529;
+            flex-grow: 1;
+        }
+        .detail-row {
+            display: flex;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+            align-items: center;
+        }
+        .description-text {
+            white-space: pre-wrap;
+            line-height: 1.6;
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border-left: 4px solid #007bff;
+            width: 100%;
+        }
+        .movie-card {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        .movie-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #007bff;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .movie-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #dee2e6;
+            flex-wrap: wrap;
+        }
+        .description-row {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+        .rating-badge {
+            font-size: 1.1rem;
+            padding: 0.4rem 0.8rem;
+        }
+        .duration-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-4">
+    <!-- Хлебные крошки -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/}">Главная</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/movies}">Фильмы</a></li>
+            <li class="breadcrumb-item active" th:text="${movie.title}" aria-current="page">Фильм</li>
+        </ol>
+    </nav>
+
+    <!-- Основная карточка фильма -->
+    <div class="movie-card">
+        <!-- Заголовок -->
+        <div class="movie-header">
+            <div>
+                <h1 class="mb-2">
+                    <i class="bi bi-film me-2"></i>
+                    <span th:text="${movie.title}">Название фильма</span>
+                </h1>
+                <p class="text-muted mb-0" th:if="${movie.releaseYear}">
+                    <i class="bi bi-calendar"></i>
+                    <span th:text="${movie.releaseYear}">2024</span> год
+                </p>
+            </div>
+            <div>
+                <span class="badge bg-info fs-5 px-3 py-2" th:if="${movie.genre?.title}" th:text="${movie.genre.title}">Жанр</span>
+                <span class="badge bg-secondary fs-5 px-3 py-2" th:unless="${movie.genre?.title}">
+                    Жанр не указан
+                </span>
+            </div>
+        </div>
+
+        <!-- Детали фильма -->
+        <div class="movie-details">
+            <!-- ID фильма -->
+            <div class="detail-row">
+                <span class="detail-label">ID:</span>
+                <span class="detail-value" th:text="${movie.id}">1</span>
+            </div>
+
+            <!-- Название -->
+            <div class="detail-row">
+                <span class="detail-label">Название:</span>
+                <span class="detail-value fw-bold fs-5" th:text="${movie.title}">Название фильма</span>
+            </div>
+
+            <!-- Жанр -->
+            <div class="detail-row">
+                <span class="detail-label">Жанр:</span>
+                <span class="detail-value" th:if="${movie.genre?.title}" th:text="${movie.genre.title}">Не указан</span>
+                <span class="detail-value text-muted" th:unless="${movie.genre?.title}">Не указан</span>
+            </div>
+
+            <!-- Год выпуска -->
+            <div class="detail-row">
+                <span class="detail-label">Год выпуска:</span>
+                <span class="detail-value" th:text="${movie.releaseYear}">2024</span>
+            </div>
+
+            <!-- Длительность -->
+            <div class="detail-row">
+                <span class="detail-label">Длительность:</span>
+                <div class="detail-value duration-info">
+                    <span th:text="${movie.durationMinutes} + ' минут'">120 минут</span>
+                    <span class="text-muted" th:if="${movie.getFormattedDuration()}" th:text="'(' + ${movie.getFormattedDuration()} + ')'">(2 ч 0 мин)</span>
+                </div>
+            </div>
+
+            <!-- Цена билета -->
+            <div class="detail-row">
+                <span class="detail-label">Цена билета:</span>
+                <span class="detail-value fw-bold text-success" th:text="${movie.ticketPrice} + ' руб.'">300 руб.</span>
+            </div>
+
+            <!-- Рейтинг -->
+            <div class="detail-row" th:if="${movie.rating != null}">
+                <span class="detail-label">Рейтинг:</span>
+                <div class="detail-value">
+                    <span class="badge bg-warning text-dark rating-badge" th:text="${movie.rating}">8.5</span>
+                    <span class="text-muted ms-2">из 10</span>
+                </div>
+            </div>
+
+            <!-- Описание -->
+            <div class="detail-row description-row" th:if="${movie.description != null and !#strings.isEmpty(movie.description)}">
+                <span class="detail-label">Описание:</span>
+                <div class="description-text" th:text="${movie.description}">
+                    Описание фильма...
+                </div>
+            </div>
+
+            <!-- Сообщение при отсутствии описания -->
+            <div class="detail-row description-row" th:unless="${movie.description != null and !#strings.isEmpty(movie.description)}">
+                <span class="detail-label">Описание:</span>
+                <div class="description-text text-muted fst-italic">
+                    Описание отсутствует
+                </div>
+            </div>
+        </div>
+
+        <!-- Кнопки действий -->
+        <div class="movie-actions">
+            <a th:href="@{/movies/edit/{id}(id=${movie.id})}" class="btn btn-warning">
+                <i class="bi bi-pencil"></i> Редактировать
+            </a>
+            <a th:href="@{/tickets/create/{id}(id=${movie.id})}" class="btn btn-success">
+                <i class="bi bi-ticket-perforated"></i> Купить билет
+            </a>
+            <a th:href="@{/movies/delete/{id}(id=${movie.id})}"
+               class="btn btn-danger"
+               onclick="return confirm('Вы уверены, что хотите удалить фильм?')">
+                <i class="bi bi-trash"></i> Удалить
+            </a>
+            <a th:href="@{/movies}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Назад к списку
+            </a>
+        </div>
+    </div>
+
+    <!-- Дополнительная информация -->
+    <div class="alert alert-info" th:if="${movie.genre}">
+        <i class="bi bi-info-circle me-2"></i>
+        <strong>О жанре:</strong>
+        <a th:href="@{/genres/view/{id}(id=${movie.genre.id})}"
+           th:text="'Просмотреть все фильмы жанра ' + ${movie.genre.title}">
+            Просмотреть все фильмы этого жанра
+        </a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- УБРАН ПРОБЛЕМНЫЙ JAVASCRIPT КОД -->
+<script>
+    // Удален проблемный код подтверждения удаления
+    // Простое подтверждение уже встроено в onclick кнопки
+</script>
+</body>
+</html>

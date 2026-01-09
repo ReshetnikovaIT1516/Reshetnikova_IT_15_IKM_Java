@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Просмотр билета</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <style>
+        .ticket-card {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .ticket-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid #dc3545;
+        }
+        .ticket-title {
+            color: #dc3545;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        .ticket-body {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .info-box {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #007bff;
+        }
+        .info-box.total {
+            border-left-color: #28a745;
+            background: #f0fff4;
+        }
+        .info-label {
+            font-weight: bold;
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        .info-value {
+            font-size: 1.2rem;
+            color: #212529;
+        }
+        .price-display {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #28a745;
+            text-align: center;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: #f0fff4;
+            border-radius: 10px;
+            border: 2px dashed #28a745;
+        }
+        .ticket-footer {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #dee2e6;
+            flex-wrap: wrap;
+        }
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+        }
+    </style>
+</head>
+<body>
+<!-- Навигация -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/}">
+            <i class="bi bi-camera-reels"></i> Кинотеатр
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/}">
+                        <i class="bi bi-house"></i> Главная
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/movies}">
+                        <i class="bi bi-film"></i> Фильмы
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/genres}">
+                        <i class="bi bi-tags"></i> Жанры
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" th:href="@{/tickets}">
+                        <i class="bi bi-ticket-perforated"></i> Билеты
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/}">Главная</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/tickets}">Билеты</a></li>
+            <li class="breadcrumb-item active">Билет #<span th:text="${ticket.id}">1</span></li>
+        </ol>
+    </nav>
+
+    <div class="ticket-card">
+        <div class="ticket-header">
+            <h1 class="ticket-title">
+                <i class="bi bi-ticket-perforated"></i>
+                Билет #<span th:text="${ticket.id}">1</span>
+            </h1>
+            <div class="text-muted">
+                <i class="bi bi-calendar"></i>
+                <span th:text="${#temporals.format(ticket.date, 'dd.MM.yyyy HH:mm:ss')}">
+                    01.01.2024 12:00:00
+                </span>
+            </div>
+        </div>
+
+        <div class="ticket-body">
+            <div class="info-box">
+                <div class="info-label">ID билета</div>
+                <div class="info-value" th:text="${ticket.id}">1</div>
+            </div>
+
+            <div class="info-box">
+                <div class="info-label">Дата покупки</div>
+                <div class="info-value">
+                    <span th:text="${#temporals.format(ticket.date, 'dd.MM.yyyy HH:mm')}">
+                        01.01.2024 12:00
+                    </span>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <div class="info-label">Покупатель</div>
+                <div class="info-value" th:text="${ticket.customerName}">Иван Иванов</div>
+            </div>
+
+            <div class="info-box">
+                <div class="info-label">Количество билетов</div>
+                <div class="info-value">
+                    <span th:text="${ticket.count}">2</span> шт.
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-light">
+                <h5 class="mb-0"><i class="bi bi-film"></i> Информация о фильме</h5>
+            </div>
+            <div class="card-body">
+                <a th:href="@{/movies/view/{id}(id=${ticket.movie.id})}"
+                   class="text-decoration-none">
+                    <h4 class="text-primary" th:text="${ticket.movie.title}">Название фильма</h4>
+                </a>
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <div class="mb-2">
+                            <i class="bi bi-tag"></i>
+                            <span th:text="${ticket.movie.genre?.title}">Жанр</span>
+                        </div>
+                        <div class="mb-2">
+                            <i class="bi bi-clock"></i>
+                            <span th:text="${ticket.movie.getFormattedDuration()}">2 ч 0 мин</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-2">
+                            <i class="bi bi-calendar"></i>
+                            <span th:text="${ticket.movie.releaseYear}">2024</span>
+                        </div>
+                        <div class="mb-2">
+                            <i class="bi bi-star"></i>
+                            <span th:if="${ticket.movie.rating != null}"
+                                  th:text="${ticket.movie.rating}">8.5</span>
+                            <span th:unless="${ticket.movie.rating != null}" class="text-muted">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="price-display">
+            <div class="small text-muted mb-1">Общая стоимость</div>
+            <div th:text="${ticket.getFormattedTotalPrice()}">600 руб.</div>
+            <div class="small text-muted mt-1">
+                <span th:text="${ticket.movie.ticketPrice}">300</span> руб. ×
+                <span th:text="${ticket.count}">2</span> шт.
+            </div>
+        </div>
+
+        <div class="ticket-footer">
+            <a th:href="@{/tickets/edit/{id}(id=${ticket.id})}" class="btn btn-warning btn-action">
+                <i class="bi bi-pencil"></i> Редактировать
+            </a>
+            <a th:href="@{/tickets}" class="btn btn-secondary btn-action">
+                <i class="bi bi-arrow-left"></i> Назад к списку
+            </a>
+            <a th:href="@{/tickets/delete/{id}(id=${ticket.id})}"
+               class="btn btn-danger btn-action"
+               onclick="return confirm('Вы уверены, что хотите удалить этот билет?')">
+                <i class="bi bi-trash"></i> Удалить
+            </a>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
