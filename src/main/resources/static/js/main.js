@@ -6,7 +6,8 @@
 document.addEventListener("DOMContentLoaded", function() {
     console.log("Кинотеатр - JavaScript загружен");
 
-    // ========== ПОДТВЕРЖДЕНИЕ УДАЛЕНИЯ ==========
+    /** ========== ПОДТВЕРЖДЕНИЕ УДАЛЕНИЯ ==========
+    */
     document.querySelectorAll('a[href*="delete"], .btn-danger').forEach(element => {
         element.addEventListener('click', function(e) {
             if (this.hasAttribute('onclick')) return; // Если уже есть onclick
@@ -22,7 +23,8 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-    // ========== ВАЛИДАЦИЯ ФОРМ ==========
+    /** ========== ВАЛИДАЦИЯ ФОРМ ==========
+    */
     const forms = document.querySelectorAll('form');
     forms.forEach(form => {
         form.addEventListener('submit', function(e) {
@@ -42,7 +44,8 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-    // ========== БЫСТРЫЙ ПОИСК В ТАБЛИЦАХ ==========
+    /** ========== БЫСТРЫЙ ПОИСК В ТАБЛИЦАХ ==========
+    */
     const searchInputs = document.querySelectorAll('input[name="customer"], input[name="search"], input[placeholder*="Поиск"]');
     searchInputs.forEach(input => {
         input.addEventListener('input', function() {
@@ -65,7 +68,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             });
 
-            // Показываем сообщение если ничего не найдено
+            /** Показываем сообщение если ничего не найдено
+            */
             const tbody = table.querySelector('tbody');
             let noResults = tbody.querySelector('.no-results-message');
 
@@ -88,7 +92,8 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-    // ========== ПЛАВНАЯ ПРОКРУТКА ДЛЯ ЯКОРЕЙ ==========
+    /** ========== ПЛАВНАЯ ПРОКРУТКА ==========
+    */
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             e.preventDefault();
@@ -105,7 +110,8 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-    // ========== АВТОФОКУС НА ФОРМАХ ==========
+    /** ========== АВТОФОКУС НА ФОРМАХ ==========
+    */
     document.querySelectorAll('form').forEach(form => {
         const firstInput = form.querySelector('input:not([type="hidden"]):not([disabled]), select:not([disabled]), textarea:not([disabled])');
         if (firstInput && !firstInput.value) {
@@ -113,7 +119,8 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
-    // ========== ПОДСВЕТКА АКТИВНОЙ СТРАНИЦЫ В НАВИГАЦИИ ==========
+    /** ========== ПОДСВЕТКА АКТИВНОЙ СТРАНИЦЫ В НАВИГАЦИИ ==========
+    */
     function highlightActiveNavItem() {
         const currentPath = window.location.pathname;
         const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
@@ -132,7 +139,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
     highlightActiveNavItem();
 
-    // ========== АВТОМАТИЧЕСКОЕ СКРЫТИЕ УВЕДОМЛЕНИЙ ==========
+    /** ========== АВТОМАТИЧЕСКОЕ СКРЫТИЕ УВЕДОМЛЕНИЙ ==========
+    */
     const alerts = document.querySelectorAll('.alert:not(.alert-permanent)');
     alerts.forEach(alert => {
         setTimeout(() => {
@@ -142,7 +150,8 @@ document.addEventListener("DOMContentLoaded", function() {
         }, 5000);
     });
 
-    // ========== РАСЧЕТ СТОИМОСТИ БИЛЕТОВ ==========
+    /** ========== РАСЧЕТ СТОИМОСТИ БИЛЕТОВ ==========
+    */
     function setupTicketPriceCalculator() {
         const priceInput = document.querySelector('input[name="ticketPrice"], input[name="price"]');
         const countInput = document.querySelector('input[name="count"]');
@@ -167,7 +176,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
     setupTicketPriceCalculator();
 
-    // ========== УПРАВЛЕНИЕ СТАТУСОМ КНОПКИ ОТПРАВКИ ==========
+    /** ========== УПРАВЛЕНИЕ СТАТУСОМ КНОПКИ ОТПРАВКИ ==========
+    */
     forms.forEach(form => {
         const submitBtn = form.querySelector('button[type="submit"]');
         if (submitBtn) {
@@ -178,7 +188,8 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
-    // ========== ПОДСВЕТКА ПУСТЫХ ПОЛЕЙ ФОРМ ==========
+    /** ========== ПОДСВЕТКА ПУСТЫХ ПОЛЕЙ ФОРМ ==========
+    */
     forms.forEach(form => {
         const inputs = form.querySelectorAll('input, select, textarea');
         inputs.forEach(input => {
@@ -192,12 +203,14 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-    // ========== ОБРАБОТКА ОШИБОК AJAX (если будете добавлять) ==========
+    /** ========== ОБРАБОТКА ОШИБОК AJAX ==========
+    */
     window.addEventListener('error', function(e) {
         console.error('JavaScript ошибка:', e.error);
     });
 
-    // ========== ДОБАВЛЕНИЕ ПОДСКАЗОК К КНОПКАМ ==========
+    /** ========== ДОБАВЛЕНИЕ ПОДСКАЗОК К КНОПКАМ ==========
+    */
     const actionButtons = document.querySelectorAll('.action-buttons .btn');
     actionButtons.forEach(btn => {
         if (!btn.title && btn.querySelector('i')) {
