@@ -92,27 +92,6 @@ public class MovieService {
         movieRepository.deleteById(id);
     }
     /**
-     * Выполняет поиск фильмов по названию с поддержкой частичного совпадения.
-     * <p>
-     * Поиск не зависит от регистра (case-insensitive) и находит фильмы,
-     * в названии которых содержится указанная подстрока.
-     * </p>
-     *
-     * @param title подстрока для поиска в названиях фильмов
-     * @return список фильмов, отсортированных по названию
-     * @throws IllegalArgumentException если title равен null
-     * @apiNote SQL: SELECT * FROM movies WHERE LOWER(title) LIKE LOWER('%?%') ORDER BY title
-     * @example
-     * <pre>
-     * При поиске "star" найдет:
-     * - "Star Wars"
-     * - "Stardust"
-     * </pre>
-     */
-    public List<Movie> searchMoviesByTitle(String title) {
-        return movieRepository.searchByTitle(title);
-    }
-    /**
      * Возвращает все фильмы указанного жанра.
      * <p>
      * Используется для фильтрации каталога по жанрам и отображения
