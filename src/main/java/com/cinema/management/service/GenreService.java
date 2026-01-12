@@ -111,7 +111,8 @@ public class GenreService {
     public boolean deleteGenre(Long id) {
         Optional<Genre> genre = genreRepository.findById(id);
         if (genre.isPresent()) {
-            // Проверяем, есть ли фильмы в этом жанре
+            /** Проверяем, есть ли фильмы в этом жанре
+             */
             List<com.cinema.management.entity.Movie> movies = movieRepository.findByGenreIdOrderByTitleAsc(id);
             if (movies.isEmpty()) {
                 genreRepository.deleteById(id);
