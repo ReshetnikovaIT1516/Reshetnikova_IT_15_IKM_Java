@@ -63,28 +63,13 @@ public class MovieController {
      * Если ни один параметр не указан, отображаются все фильмы.
      * </p>
      *
-     * @param search строка поиска по названию фильма (может быть {@code null})
-     * @param genreId идентификатор жанра для фильтрации (может быть {@code null})
      * @param model объект для передачи данных в представление
      * @return имя Thymeleaf шаблона "movies/list"
      */
     @GetMapping
-    public String listMovies(@RequestParam(value = "search", required = false) String search,
-                             @RequestParam(value = "genreId", required = false) Long genreId,
-                             Model model) {
-        List<Movie> movies;
-
-        if (search != null && !search.trim().isEmpty()) {
-            movies = movieService.searchMoviesByTitle(search.trim());
-            model.addAttribute("search", search);
-        } else if (genreId != null) {
-            movies = movieService.getMoviesByGenre(genreId);
-            Optional<Genre> genre = genreService.getGenreById(genreId);
-            genre.ifPresent(g -> model.addAttribute("filterGenre", g));
-        } else {
-            movies = movieService.getAllMovies();
-        }
-
+    public String listMovies(Model model) {
+        // Просто получаем все фильмы
+        List<Movie> movies = movieService.getAllMovies();
         model.addAttribute("movies", movies);
         model.addAttribute("genres", genreService.getAllGenres());
         return "movies/list";
